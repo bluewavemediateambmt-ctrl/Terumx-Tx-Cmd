@@ -1,187 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Future Signal Predictor PRO</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Future Signal Predictor ULTRA PRO</title>
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-    background:#0f172a;
-    color:white;
-    padding:20px;
+background:#020617;
+color:white;
+padding:20px;
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:#2563eb33;
+filter:blur(120px);
+top:-200px;
+right:-200px;
+z-index:-1;
+animation:moveGlow 8s linear infinite alternate;
+}
+
+@keyframes moveGlow{
+0%{transform:translate(0,0);}
+100%{transform:translate(-100px,100px);}
 }
 
 .container{
-    max-width:1000px;
-    margin:auto;
+max-width:1200px;
+margin:auto;
 }
 
 .title{
-    text-align:center;
-    font-size:34px;
-    font-weight:bold;
-    margin-bottom:20px;
+text-align:center;
+font-size:42px;
+font-weight:bold;
+margin-bottom:25px;
+background:linear-gradient(to right,#38bdf8,#2563eb,#9333ea);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:glow 3s infinite alternate;
+}
+
+@keyframes glow{
+0%{filter:drop-shadow(0 0 5px #2563eb);}
+100%{filter:drop-shadow(0 0 25px #9333ea);}
 }
 
 .card{
-    background:#1e293b;
-    border-radius:16px;
-    padding:20px;
-    margin-bottom:20px;
+background:rgba(15,23,42,0.9);
+backdrop-filter:blur(10px);
+border:1px solid #1e293b;
+border-radius:22px;
+padding:20px;
+margin-bottom:25px;
+box-shadow:0 0 20px #00000055;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-4px);
 }
 
 .row{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
+display:flex;
+gap:15px;
+flex-wrap:wrap;
 }
 
 .box{
-    flex:1;
-    min-width:180px;
-    background:#111827;
-    border-radius:12px;
-    padding:15px;
-    text-align:center;
+flex:1;
+min-width:180px;
+background:#0f172a;
+border:1px solid #1e293b;
+border-radius:18px;
+padding:20px;
+text-align:center;
+position:relative;
+overflow:hidden;
+}
+
+.box::before{
+content:'';
+position:absolute;
+width:100%;
+height:4px;
+background:linear-gradient(to right,#38bdf8,#9333ea);
+top:0;
+left:0;
 }
 
 .label{
-    color:#94a3b8;
-    margin-bottom:10px;
-    font-size:14px;
+font-size:14px;
+color:#94a3b8;
+margin-bottom:12px;
 }
 
 .value{
-    font-size:26px;
-    font-weight:bold;
+font-size:30px;
+font-weight:bold;
 }
 
 .big{
-    color:#22c55e;
+color:#22c55e;
+text-shadow:0 0 10px #22c55e;
 }
 
 .small{
-    color:#ef4444;
-}
-
-.profit{
-    color:#22c55e;
-}
-
-.loss{
-    color:#ef4444;
-}
-
-.history-item{
-    background:#111827;
-    border-radius:12px;
-    padding:15px;
-    margin-top:10px;
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.badge{
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.green{
-    background:#14532d;
-}
-
-.red{
-    background:#7f1d1d;
-}
-
-.yellow{
-    background:#78350f;
-}
-
-button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:#2563eb;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-top:20px;
-}
-
-button:hover{
-    opacity:0.9;
+color:#ef4444;
+text-shadow:0 0 10px #ef4444;
 }
 
 .status{
-    text-align:center;
-    margin-top:15px;
-    color:#94a3b8;
-}
-
-.recent-box{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:15px;
-}
-
-.recent-item{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:bold;
-}
-
-.green-circle{
-    background:#14532d;
-}
-
-.red-circle{
-    background:#7f1d1d;
+text-align:center;
+margin-top:20px;
+font-size:15px;
+color:#94a3b8;
 }
 
 .logic-box{
-    margin-top:15px;
-    background:#111827;
-    padding:15px;
-    border-radius:12px;
-    line-height:1.8;
+margin-top:20px;
+background:#020617;
+border-radius:16px;
+padding:15px;
+line-height:1.8;
+border:1px solid #1e293b;
 }
 
 .brain{
-    margin-top:10px;
-    color:#38bdf8;
-    font-weight:bold;
+margin-top:15px;
+font-weight:bold;
+color:#38bdf8;
+font-size:18px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+border:none;
+border-radius:16px;
+background:linear-gradient(to right,#2563eb,#9333ea);
+font-size:17px;
+font-weight:bold;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.02);
+opacity:0.9;
+}
+
+.recent-box{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+.recent-item{
+width:55px;
+height:55px;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:bold;
+font-size:18px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.08);}
+100%{transform:scale(1);}
+}
+
+.green-circle{
+background:#14532d;
+box-shadow:0 0 12px #22c55e;
+}
+
+.red-circle{
+background:#7f1d1d;
+box-shadow:0 0 12px #ef4444;
+}
+
+.history-item{
+background:#020617;
+border:1px solid #1e293b;
+padding:18px;
+border-radius:16px;
+margin-top:12px;
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+transition:0.3s;
+}
+
+.history-item:hover{
+transform:translateX(4px);
+}
+
+.badge{
+padding:7px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+}
+
+.green{
+background:#14532d;
+}
+
+.red{
+background:#7f1d1d;
+}
+
+.yellow{
+background:#78350f;
+}
+
+.profit{
+color:#22c55e;
+}
+
+.loss{
+color:#ef4444;
+}
+
+.bar-wrap{
+margin-top:20px;
+}
+
+.bar{
+height:20px;
+background:#111827;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.bar-fill{
+height:100%;
+width:0%;
+background:linear-gradient(to right,#38bdf8,#22c55e);
+transition:1s;
+}
+
+.ai-status{
+margin-top:20px;
+padding:14px;
+border-radius:14px;
+background:#111827;
+border:1px solid #1e293b;
+font-size:15px;
+line-height:1.7;
+}
+
+.footer{
+text-align:center;
+margin-top:30px;
+color:#64748b;
+font-size:14px;
 }
 
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
 
 <div class="title">
-AI Future Signal Predictor PRO
+AI Future Signal Predictor ULTRA PRO
 </div>
 
 <div class="card">
@@ -195,16 +303,16 @@ AI Future Signal Predictor PRO
 
 <div class="box">
 <div class="label">Confidence</div>
-<div class="value" id="confidence">78%</div>
+<div class="value" id="confidence">0%</div>
 </div>
 
 <div class="box">
-<div class="label">Trend</div>
-<div class="value" id="trend">STRONG BIG</div>
+<div class="label">Market Trend</div>
+<div class="value" id="trend">ANALYZING</div>
 </div>
 
 <div class="box">
-<div class="label">Risk</div>
+<div class="label">Risk Level</div>
 <div class="value" id="risk">LOW</div>
 </div>
 
@@ -222,10 +330,21 @@ AI Loading...
 Brain Power: 0%
 </div>
 
+<div class="bar-wrap">
+AI Accuracy
+<div class="bar">
+<div class="bar-fill" id="accuracyBar"></div>
+</div>
+</div>
+
 <div class="recent-box" id="recentResults"></div>
 
+<div class="ai-status" id="aiStatus">
+AI Neural Engine Booting...
+</div>
+
 <button onclick="loadData()">
-Refresh Signal
+Refresh AI Signal
 </button>
 
 </div>
@@ -238,6 +357,10 @@ Refresh Signal
 
 </div>
 
+<div class="footer">
+AI Predictor PRO • Quantum Neural Analysis
+</div>
+
 </div>
 
 <script>
@@ -245,58 +368,23 @@ Refresh Signal
 const API_URL =
 "https://draw.ar-lottery02.com/WinGo/WinGo_30S/GetHistoryIssuePage.json?pageSize=50&pageNo=1&typeId=1&language=0";
 
-
-
-// ================= HISTORY =================
-
 let signalHistory =
-JSON.parse(
-localStorage.getItem("signalHistory")
-) || [];
-
-
-
-// ================= AI BRAIN =================
+JSON.parse(localStorage.getItem("signalHistory")) || [];
 
 let aiBrain =
-JSON.parse(
-localStorage.getItem("aiBrain")
-) || {
+JSON.parse(localStorage.getItem("aiBrain")) || {
 
-trend:{
-win:1,
-loss:1,
-weight:1
-},
-
-momentum:{
-win:1,
-loss:1,
-weight:1
-},
-
-reversal:{
-win:1,
-loss:1,
-weight:1
-},
-
-pattern:{
-win:1,
-loss:1,
-weight:1
-}
+trend:{win:5,loss:2,weight:1},
+momentum:{win:5,loss:2,weight:1},
+reversal:{win:5,loss:2,weight:1},
+pattern:{win:5,loss:2,weight:1},
+volatility:{win:5,loss:2,weight:1},
+machine:{win:5,loss:2,weight:1}
 
 };
 
-
-
 let lastPeriod = null;
 let pendingSignal = null;
-
-
-
-// ================= HELPERS =================
 
 function saveBrain(){
 
@@ -320,9 +408,8 @@ function calcWeight(name){
 let s = aiBrain[name];
 
 return (
-s.win /
-(s.win + s.loss)
-) * 100;
+s.win / (s.win+s.loss)
+);
 
 }
 
@@ -345,22 +432,15 @@ saveBrain();
 
 }
 
-
-
-// ================= AI ANALYSIS =================
-
 function analyze(results){
 
-let recent =
-results.slice(0,20);
+let recent = results.slice(0,25);
 
 let scoreBig = 0;
 let scoreSmall = 0;
 
 let logic = [];
-
 let usedStrategies = [];
-
 
 
 // ================= TREND =================
@@ -371,91 +451,32 @@ recent.filter(x=>x==="BIG").length;
 let smallCount =
 recent.filter(x=>x==="SMALL").length;
 
-if(bigCount >= 12){
+if(bigCount > smallCount){
 
-scoreBig +=
-40 * aiBrain.trend.weight;
+scoreBig += 45 * aiBrain.trend.weight;
 
-logic.push(
-"Trend AI → BIG"
-);
+logic.push("Trend Engine → BIG");
 
 usedStrategies.push({
 name:"trend",
-prediction:"BIG"
-});
-
-}
-
-if(smallCount >= 12){
-
-scoreSmall +=
-40 * aiBrain.trend.weight;
-
-logic.push(
-"Trend AI → SMALL"
-);
-
-usedStrategies.push({
-name:"trend",
-prediction:"SMALL"
-});
-
-}
-
-
-
-// ================= MOMENTUM =================
-
-let momentum = 0;
-
-for(let i=0;i<5;i++){
-
-if(recent[i] === recent[i+1]){
-
-momentum++;
-
-}
-
-}
-
-if(momentum >= 3){
-
-if(recent[0] === "BIG"){
-
-scoreBig +=
-30 * aiBrain.momentum.weight;
-
-logic.push(
-"Momentum AI → BIG"
-);
-
-usedStrategies.push({
-name:"momentum",
 prediction:"BIG"
 });
 
 }else{
 
-scoreSmall +=
-30 * aiBrain.momentum.weight;
+scoreSmall += 45 * aiBrain.trend.weight;
 
-logic.push(
-"Momentum AI → SMALL"
-);
+logic.push("Trend Engine → SMALL");
 
 usedStrategies.push({
-name:"momentum",
+name:"trend",
 prediction:"SMALL"
 });
 
 }
 
-}
 
-
-
-// ================= REVERSAL =================
+// ================= MOMENTUM =================
 
 let streak = 1;
 
@@ -473,16 +494,44 @@ break;
 
 }
 
-if(streak >= 4){
+if(streak >= 3){
 
 if(recent[0] === "BIG"){
 
-scoreSmall +=
-35 * aiBrain.reversal.weight;
+scoreBig += 40 * aiBrain.momentum.weight;
 
-logic.push(
-"Reversal AI → SMALL"
-);
+logic.push("Momentum Engine → BIG");
+
+usedStrategies.push({
+name:"momentum",
+prediction:"BIG"
+});
+
+}else{
+
+scoreSmall += 40 * aiBrain.momentum.weight;
+
+logic.push("Momentum Engine → SMALL");
+
+usedStrategies.push({
+name:"momentum",
+prediction:"SMALL"
+});
+
+}
+
+}
+
+
+// ================= REVERSAL =================
+
+if(streak >= 5){
+
+if(recent[0] === "BIG"){
+
+scoreSmall += 55 * aiBrain.reversal.weight;
+
+logic.push("Reversal Engine → SMALL");
 
 usedStrategies.push({
 name:"reversal",
@@ -491,12 +540,9 @@ prediction:"SMALL"
 
 }else{
 
-scoreBig +=
-35 * aiBrain.reversal.weight;
+scoreBig += 55 * aiBrain.reversal.weight;
 
-logic.push(
-"Reversal AI → BIG"
-);
+logic.push("Reversal Engine → BIG");
 
 usedStrategies.push({
 name:"reversal",
@@ -508,20 +554,18 @@ prediction:"BIG"
 }
 
 
-
 // ================= PATTERN =================
 
 let patterns = {};
 
-for(let i=0;i<recent.length-3;i++){
+for(let i=0;i<recent.length-4;i++){
 
 let key =
 recent[i] +
 recent[i+1] +
 recent[i+2];
 
-let next =
-recent[i+3];
+let next = recent[i+3];
 
 if(!patterns[key]){
 
@@ -543,17 +587,13 @@ recent[2];
 
 if(patterns[currentPattern]){
 
-let p =
-patterns[currentPattern];
+let p = patterns[currentPattern];
 
 if(p.BIG > p.SMALL){
 
-scoreBig +=
-25 * aiBrain.pattern.weight;
+scoreBig += 35 * aiBrain.pattern.weight;
 
-logic.push(
-"Pattern AI → BIG"
-);
+logic.push("Pattern AI → BIG");
 
 usedStrategies.push({
 name:"pattern",
@@ -562,12 +602,9 @@ prediction:"BIG"
 
 }else{
 
-scoreSmall +=
-25 * aiBrain.pattern.weight;
+scoreSmall += 35 * aiBrain.pattern.weight;
 
-logic.push(
-"Pattern AI → SMALL"
-);
+logic.push("Pattern AI → SMALL");
 
 usedStrategies.push({
 name:"pattern",
@@ -579,27 +616,93 @@ prediction:"SMALL"
 }
 
 
+// ================= VOLATILITY =================
 
-// ================= WEIGHT ANALYSIS =================
+let changes = 0;
 
-let weight = 20;
+for(let i=0;i<recent.length-1;i++){
 
-recent.forEach(r=>{
+if(recent[i] !== recent[i+1]){
 
-if(r === "BIG"){
-
-scoreBig += weight;
-
-}else{
-
-scoreSmall += weight;
+changes++;
 
 }
 
-weight--;
+}
+
+let volatility =
+(changes/recent.length)*100;
+
+if(volatility < 35){
+
+if(recent[0] === "BIG"){
+
+scoreBig += 25 * aiBrain.volatility.weight;
+
+logic.push("Stable Market → BIG");
+
+usedStrategies.push({
+name:"volatility",
+prediction:"BIG"
+});
+
+}else{
+
+scoreSmall += 25 * aiBrain.volatility.weight;
+
+logic.push("Stable Market → SMALL");
+
+usedStrategies.push({
+name:"volatility",
+prediction:"SMALL"
+});
+
+}
+
+}
+
+
+// ================= MACHINE LEARNING =================
+
+let machineScore = 0;
+
+recent.forEach((r,index)=>{
+
+if(r==="BIG"){
+
+machineScore += (25-index);
+
+}else{
+
+machineScore -= (25-index);
+
+}
 
 });
 
+if(machineScore > 0){
+
+scoreBig += 50 * aiBrain.machine.weight;
+
+logic.push("Neural AI → BIG");
+
+usedStrategies.push({
+name:"machine",
+prediction:"BIG"
+});
+
+}else{
+
+scoreSmall += 50 * aiBrain.machine.weight;
+
+logic.push("Neural AI → SMALL");
+
+usedStrategies.push({
+name:"machine",
+prediction:"SMALL"
+});
+
+}
 
 
 // ================= FINAL =================
@@ -619,75 +722,41 @@ Math.floor(
 total) * 100
 );
 
-confidence =
-Math.min(confidence,95);
+if(confidence > 98){
 
-
-
-// ================= RISK =================
-
-let changes = 0;
-
-for(let i=0;i<recent.length-1;i++){
-
-if(recent[i] !== recent[i+1]){
-
-changes++;
+confidence = 98;
 
 }
 
-}
-
-let volatility =
-Math.floor(
-(changes/recent.length)*100
-);
+let trend =
+prediction === "BIG"
+? "STRONG BIG"
+: "STRONG SMALL";
 
 let risk = "MEDIUM";
 
-if(volatility >= 70){
+if(volatility > 70){
 
 risk = "HIGH";
-
 confidence -= 10;
-
 }
 
-if(volatility <= 35){
+if(volatility < 35){
 
 risk = "LOW";
 
 }
 
-
-
-// ================= TREND =================
-
-let trend = "SIDEWAYS";
-
-if(scoreBig > scoreSmall){
-
-trend = "STRONG BIG";
-
-}else{
-
-trend = "STRONG SMALL";
-
-}
-
-
-
-// ================= BRAIN POWER =================
-
-let brainPower =
-Math.floor(
+let brainPower = Math.floor(
 
 (
 aiBrain.trend.weight +
 aiBrain.momentum.weight +
 aiBrain.reversal.weight +
-aiBrain.pattern.weight
-) / 4
+aiBrain.pattern.weight +
+aiBrain.volatility.weight +
+aiBrain.machine.weight
+)/6*100
 
 );
 
@@ -706,7 +775,6 @@ brainPower
 }
 
 
-
 // ================= LOAD =================
 
 async function loadData(){
@@ -714,17 +782,13 @@ async function loadData(){
 try{
 
 document.getElementById("periodStatus")
-.innerText =
-"AI Learning...";
+.innerText = "Quantum AI Scanning...";
 
-const response =
-await fetch(API_URL);
+const response = await fetch(API_URL);
 
-const data =
-await response.json();
+const data = await response.json();
 
-const history =
-data.data.list;
+const history = data.data.list;
 
 const currentPeriod =
 history[0].issueNumber;
@@ -741,7 +805,6 @@ getBigSmall(item.number)
 
 const analysis =
 analyze(results);
-
 
 
 // ================= UI =================
@@ -784,15 +847,24 @@ document.getElementById("periodStatus")
 "Current Period: " +
 currentPeriod;
 
+document.getElementById("accuracyBar")
+.style.width =
+analysis.confidence + "%";
 
-
-// ================= RECENT =================
+document.getElementById("aiStatus")
+.innerHTML = `
+AI Neural Network Active<br>
+Prediction Confidence:
+${analysis.confidence}%<br>
+Market Volatility:
+${analysis.risk}<br>
+Realtime Adaptive Learning Enabled
+`;
 
 renderRecent(history);
 
 
-
-// ================= CHECK RESULT =================
+// ================= RESULT CHECK =================
 
 if(
 lastPeriod &&
@@ -808,10 +880,6 @@ actual === pendingSignal.prediction
 ? "PROFIT"
 : "LOSS";
 
-
-
-// ================= LEARNING =================
-
 pendingSignal.usedStrategies
 .forEach(strategy=>{
 
@@ -825,24 +893,14 @@ win
 
 });
 
-
-
 signalHistory.unshift({
 
 period:currentPeriod,
-
-prediction:
-pendingSignal.prediction,
-
+prediction:pendingSignal.prediction,
 actual,
-
-confidence:
-pendingSignal.confidence,
-
+confidence:pendingSignal.confidence,
 status,
-
-time:new Date()
-.toLocaleTimeString()
+time:new Date().toLocaleTimeString()
 
 });
 
@@ -854,8 +912,6 @@ JSON.stringify(signalHistory)
 renderHistory();
 
 }
-
-
 
 pendingSignal = {
 
@@ -870,8 +926,7 @@ analysis.usedStrategies
 
 };
 
-lastPeriod =
-currentPeriod;
+lastPeriod = currentPeriod;
 
 }catch(error){
 
@@ -886,7 +941,6 @@ document.getElementById("periodStatus")
 }
 
 
-
 // ================= RECENT =================
 
 function renderRecent(history){
@@ -896,7 +950,7 @@ document.getElementById("recentResults");
 
 box.innerHTML = "";
 
-history.slice(0,10)
+history.slice(0,12)
 .forEach(item=>{
 
 const type =
@@ -917,7 +971,6 @@ ${item.number}
 });
 
 }
-
 
 
 // ================= HISTORY =================
@@ -942,7 +995,7 @@ ${item.period}
 </div>
 
 <div>
-Signal:<br>
+Signal<br>
 <b class="${
 item.prediction === 'BIG'
 ? 'profit'
@@ -953,7 +1006,7 @@ ${item.prediction}
 </div>
 
 <div>
-Actual:<br>
+Actual<br>
 <b class="${
 item.actual === 'BIG'
 ? 'profit'
@@ -964,7 +1017,7 @@ ${item.actual}
 </div>
 
 <div>
-Confidence:<br>
+Confidence<br>
 ${item.confidence}%
 </div>
 
@@ -986,18 +1039,12 @@ ${item.status}
 
 }
 
-
-
 renderHistory();
 loadData();
-
-
-
-// ================= SAME TIMING =================
 
 setInterval(loadData,30000);
 
 </script>
 
 </body>
-</html>
+    </html>
