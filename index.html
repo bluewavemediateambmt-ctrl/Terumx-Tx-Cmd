@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Future Signal Predictor PRO</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    padding:20px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+.title{
+    text-align:center;
+    font-size:34px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#1e293b;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.row{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.box{
+    flex:1;
+    min-width:180px;
+    background:#111827;
+    border-radius:12px;
+    padding:15px;
+    text-align:center;
+}
+
+.label{
+    color:#94a3b8;
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+.value{
+    font-size:26px;
+    font-weight:bold;
+}
+
+.big{
+    color:#22c55e;
+}
+
+.small{
+    color:#ef4444;
+}
+
+.profit{
+    color:#22c55e;
+}
+
+.loss{
+    color:#ef4444;
+}
+
+.history-item{
+    background:#111827;
+    border-radius:12px;
+    padding:15px;
+    margin-top:10px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.badge{
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.green{
+    background:#14532d;
+}
+
+.red{
+    background:#7f1d1d;
+}
+
+.yellow{
+    background:#78350f;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:20px;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.status{
+    text-align:center;
+    margin-top:15px;
+    color:#94a3b8;
+}
+
+.recent-box{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+
+.recent-item{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+}
+
+.green-circle{
+    background:#14532d;
+}
+
+.red-circle{
+    background:#7f1d1d;
+}
+
+.logic-box{
+    margin-top:15px;
+    background:#111827;
+    padding:15px;
+    border-radius:12px;
+    line-height:1.8;
+}
+
+.brain{
+    margin-top:10px;
+    color:#38bdf8;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="title">
+AI Future Signal Predictor PRO
+</div>
+
+<div class="card">
+
+<div class="row">
+
+<div class="box">
+<div class="label">Next Prediction</div>
+<div class="value big" id="prediction">BIG</div>
+</div>
+
+<div class="box">
+<div class="label">Confidence</div>
+<div class="value" id="confidence">78%</div>
+</div>
+
+<div class="box">
+<div class="label">Trend</div>
+<div class="value" id="trend">STRONG BIG</div>
+</div>
+
+<div class="box">
+<div class="label">Risk</div>
+<div class="value" id="risk">LOW</div>
+</div>
+
+</div>
+
+<div class="status" id="periodStatus">
+Waiting For API...
+</div>
+
+<div class="logic-box" id="logicBox">
+AI Loading...
+</div>
+
+<div class="brain" id="brainPower">
+Brain Power: 0%
+</div>
+
+<div class="recent-box" id="recentResults"></div>
+
+<button onclick="loadData()">
+Refresh Signal
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Signal History</h2>
+
+<div id="history"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const API_URL =
+"https://draw.ar-lottery02.com/WinGo/WinGo_30S/GetHistoryIssuePage.json?pageSize=50&pageNo=1&typeId=1&language=0";
+
+
+
+// ================= HISTORY =================
+
+let signalHistory =
+JSON.parse(
+localStorage.getItem("signalHistory")
+) || [];
+
+
+
+// ================= AI BRAIN =================
+
+let aiBrain =
+JSON.parse(
+localStorage.getItem("aiBrain")
+) || {
+
+trend:{
+win:1,
+loss:1,
+weight:1
+},
+
+momentum:{
+win:1,
+loss:1,
+weight:1
+},
+
+reversal:{
+win:1,
+loss:1,
+weight:1
+},
+
+pattern:{
+win:1,
+loss:1,
+weight:1
+}
+
+};
+
+
+
+let lastPeriod = null;
+let pendingSignal = null;
+
+
+
+// ================= HELPERS =================
+
+function saveBrain(){
+
+localStorage.setItem(
+"aiBrain",
+JSON.stringify(aiBrain)
+);
+
+}
+
+function getBigSmall(num){
+
+return Number(num) >= 5
+? "BIG"
+: "SMALL";
+
+}
+
+function calcWeight(name){
+
+let s = aiBrain[name];
+
+return (
+s.win /
+(s.win + s.loss)
+) * 100;
+
+}
+
+function updateBrain(name,win){
+
+if(win){
+
+aiBrain[name].win++;
+
+}else{
+
+aiBrain[name].loss++;
+
+}
+
+aiBrain[name].weight =
+calcWeight(name);
+
+saveBrain();
+
+}
+
+
+
+// ================= AI ANALYSIS =================
+
+function analyze(results){
+
+let recent =
+results.slice(0,20);
+
+let scoreBig = 0;
+let scoreSmall = 0;
+
+let logic = [];
+
+let usedStrategies = [];
+
+
+
+// ================= TREND =================
+
+let bigCount =
+recent.filter(x=>x==="BIG").length;
+
+let smallCount =
+recent.filter(x=>x==="SMALL").length;
+
+if(bigCount >= 12){
+
+scoreBig +=
+40 * aiBrain.trend.weight;
+
+logic.push(
+"Trend AI → BIG"
+);
+
+usedStrategies.push({
+name:"trend",
+prediction:"BIG"
+});
+
+}
+
+if(smallCount >= 12){
+
+scoreSmall +=
+40 * aiBrain.trend.weight;
+
+logic.push(
+"Trend AI → SMALL"
+);
+
+usedStrategies.push({
+name:"trend",
+prediction:"SMALL"
+});
+
+}
+
+
+
+// ================= MOMENTUM =================
+
+let momentum = 0;
+
+for(let i=0;i<5;i++){
+
+if(recent[i] === recent[i+1]){
+
+momentum++;
+
+}
+
+}
+
+if(momentum >= 3){
+
+if(recent[0] === "BIG"){
+
+scoreBig +=
+30 * aiBrain.momentum.weight;
+
+logic.push(
+"Momentum AI → BIG"
+);
+
+usedStrategies.push({
+name:"momentum",
+prediction:"BIG"
+});
+
+}else{
+
+scoreSmall +=
+30 * aiBrain.momentum.weight;
+
+logic.push(
+"Momentum AI → SMALL"
+);
+
+usedStrategies.push({
+name:"momentum",
+prediction:"SMALL"
+});
+
+}
+
+}
+
+
+
+// ================= REVERSAL =================
+
+let streak = 1;
+
+for(let i=0;i<recent.length-1;i++){
+
+if(recent[i] === recent[i+1]){
+
+streak++;
+
+}else{
+
+break;
+
+}
+
+}
+
+if(streak >= 4){
+
+if(recent[0] === "BIG"){
+
+scoreSmall +=
+35 * aiBrain.reversal.weight;
+
+logic.push(
+"Reversal AI → SMALL"
+);
+
+usedStrategies.push({
+name:"reversal",
+prediction:"SMALL"
+});
+
+}else{
+
+scoreBig +=
+35 * aiBrain.reversal.weight;
+
+logic.push(
+"Reversal AI → BIG"
+);
+
+usedStrategies.push({
+name:"reversal",
+prediction:"BIG"
+});
+
+}
+
+}
+
+
+
+// ================= PATTERN =================
+
+let patterns = {};
+
+for(let i=0;i<recent.length-3;i++){
+
+let key =
+recent[i] +
+recent[i+1] +
+recent[i+2];
+
+let next =
+recent[i+3];
+
+if(!patterns[key]){
+
+patterns[key] = {
+BIG:0,
+SMALL:0
+};
+
+}
+
+patterns[key][next]++;
+
+}
+
+let currentPattern =
+recent[0] +
+recent[1] +
+recent[2];
+
+if(patterns[currentPattern]){
+
+let p =
+patterns[currentPattern];
+
+if(p.BIG > p.SMALL){
+
+scoreBig +=
+25 * aiBrain.pattern.weight;
+
+logic.push(
+"Pattern AI → BIG"
+);
+
+usedStrategies.push({
+name:"pattern",
+prediction:"BIG"
+});
+
+}else{
+
+scoreSmall +=
+25 * aiBrain.pattern.weight;
+
+logic.push(
+"Pattern AI → SMALL"
+);
+
+usedStrategies.push({
+name:"pattern",
+prediction:"SMALL"
+});
+
+}
+
+}
+
+
+
+// ================= WEIGHT ANALYSIS =================
+
+let weight = 20;
+
+recent.forEach(r=>{
+
+if(r === "BIG"){
+
+scoreBig += weight;
+
+}else{
+
+scoreSmall += weight;
+
+}
+
+weight--;
+
+});
+
+
+
+// ================= FINAL =================
+
+let prediction =
+scoreBig > scoreSmall
+? "BIG"
+: "SMALL";
+
+let total =
+scoreBig + scoreSmall;
+
+let confidence =
+Math.floor(
+(Math.max(scoreBig,scoreSmall)
+/
+total) * 100
+);
+
+confidence =
+Math.min(confidence,95);
+
+
+
+// ================= RISK =================
+
+let changes = 0;
+
+for(let i=0;i<recent.length-1;i++){
+
+if(recent[i] !== recent[i+1]){
+
+changes++;
+
+}
+
+}
+
+let volatility =
+Math.floor(
+(changes/recent.length)*100
+);
+
+let risk = "MEDIUM";
+
+if(volatility >= 70){
+
+risk = "HIGH";
+
+confidence -= 10;
+
+}
+
+if(volatility <= 35){
+
+risk = "LOW";
+
+}
+
+
+
+// ================= TREND =================
+
+let trend = "SIDEWAYS";
+
+if(scoreBig > scoreSmall){
+
+trend = "STRONG BIG";
+
+}else{
+
+trend = "STRONG SMALL";
+
+}
+
+
+
+// ================= BRAIN POWER =================
+
+let brainPower =
+Math.floor(
+
+(
+aiBrain.trend.weight +
+aiBrain.momentum.weight +
+aiBrain.reversal.weight +
+aiBrain.pattern.weight
+) / 4
+
+);
+
+return {
+
+prediction,
+confidence,
+trend,
+risk,
+logic,
+usedStrategies,
+brainPower
+
+};
+
+}
+
+
+
+// ================= LOAD =================
+
+async function loadData(){
+
+try{
+
+document.getElementById("periodStatus")
+.innerText =
+"AI Learning...";
+
+const response =
+await fetch(API_URL);
+
+const data =
+await response.json();
+
+const history =
+data.data.list;
+
+const currentPeriod =
+history[0].issueNumber;
+
+let results = [];
+
+history.forEach(item=>{
+
+results.push(
+getBigSmall(item.number)
+);
+
+});
+
+const analysis =
+analyze(results);
+
+
+
+// ================= UI =================
+
+document.getElementById("prediction")
+.innerText =
+analysis.prediction;
+
+document.getElementById("prediction")
+.className =
+analysis.prediction === "BIG"
+? "value big"
+: "value small";
+
+document.getElementById("confidence")
+.innerText =
+analysis.confidence + "%";
+
+document.getElementById("trend")
+.innerText =
+analysis.trend;
+
+document.getElementById("risk")
+.innerText =
+analysis.risk;
+
+document.getElementById("brainPower")
+.innerText =
+"Brain Power: " +
+analysis.brainPower + "%";
+
+document.getElementById("logicBox")
+.innerHTML =
+analysis.logic.map(x=>
+`<div>• ${x}</div>`
+).join("");
+
+document.getElementById("periodStatus")
+.innerText =
+"Current Period: " +
+currentPeriod;
+
+
+
+// ================= RECENT =================
+
+renderRecent(history);
+
+
+
+// ================= CHECK RESULT =================
+
+if(
+lastPeriod &&
+currentPeriod !== lastPeriod &&
+pendingSignal
+){
+
+const actual =
+getBigSmall(history[0].number);
+
+const status =
+actual === pendingSignal.prediction
+? "PROFIT"
+: "LOSS";
+
+
+
+// ================= LEARNING =================
+
+pendingSignal.usedStrategies
+.forEach(strategy=>{
+
+let win =
+strategy.prediction === actual;
+
+updateBrain(
+strategy.name,
+win
+);
+
+});
+
+
+
+signalHistory.unshift({
+
+period:currentPeriod,
+
+prediction:
+pendingSignal.prediction,
+
+actual,
+
+confidence:
+pendingSignal.confidence,
+
+status,
+
+time:new Date()
+.toLocaleTimeString()
+
+});
+
+localStorage.setItem(
+"signalHistory",
+JSON.stringify(signalHistory)
+);
+
+renderHistory();
+
+}
+
+
+
+pendingSignal = {
+
+prediction:
+analysis.prediction,
+
+confidence:
+analysis.confidence,
+
+usedStrategies:
+analysis.usedStrategies
+
+};
+
+lastPeriod =
+currentPeriod;
+
+}catch(error){
+
+console.log(error);
+
+document.getElementById("periodStatus")
+.innerText =
+"API Error Or CORS Block";
+
+}
+
+}
+
+
+
+// ================= RECENT =================
+
+function renderRecent(history){
+
+const box =
+document.getElementById("recentResults");
+
+box.innerHTML = "";
+
+history.slice(0,10)
+.forEach(item=>{
+
+const type =
+getBigSmall(item.number);
+
+box.innerHTML += `
+
+<div class="recent-item ${
+type === 'BIG'
+? 'green-circle'
+: 'red-circle'
+}">
+${item.number}
+</div>
+
+`;
+
+});
+
+}
+
+
+
+// ================= HISTORY =================
+
+function renderHistory(){
+
+const historyBox =
+document.getElementById("history");
+
+historyBox.innerHTML = "";
+
+signalHistory.slice(0,20)
+.forEach(item=>{
+
+historyBox.innerHTML += `
+
+<div class="history-item">
+
+<div>
+<b>${item.time}</b><br>
+${item.period}
+</div>
+
+<div>
+Signal:<br>
+<b class="${
+item.prediction === 'BIG'
+? 'profit'
+: 'loss'
+}">
+${item.prediction}
+</b>
+</div>
+
+<div>
+Actual:<br>
+<b class="${
+item.actual === 'BIG'
+? 'profit'
+: 'loss'
+}">
+${item.actual}
+</b>
+</div>
+
+<div>
+Confidence:<br>
+${item.confidence}%
+</div>
+
+<div>
+<span class="badge ${
+item.status === 'PROFIT'
+? 'green'
+: 'red'
+}">
+${item.status}
+</span>
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+
+renderHistory();
+loadData();
+
+
+
+// ================= SAME TIMING =================
+
+setInterval(loadData,30000);
+
+</script>
+
+</body>
+</html>
